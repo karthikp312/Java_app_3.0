@@ -81,6 +81,14 @@ pipeline{
                }
             }
         }
+        stage('Docker Run'){
+            when { expression { params.action == 'create'} }
+            steps{
+                script{
+                    dockerRun("${params.ImageName}")
+                }
+            }
+        }
          stage('Docker Image Scan: trivy '){
          when { expression {  params.action == 'Destroy' } }
             steps{
