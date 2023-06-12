@@ -81,14 +81,6 @@ pipeline{
                }
             }
         }
-        stage('Docker Run'){
-            when { expression { params.action == 'create'} }
-            steps{
-                script{
-                    dockerRun("${params.ImageName}")
-                }
-            }
-        }
          stage('Docker Image Scan: trivy '){
          when { expression {  params.action == 'Destroy' } }
             steps{
@@ -106,7 +98,15 @@ pipeline{
                    dockerImagePush("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
                }
             }
-        }   
+        }
+        stage('Docker Run'){
+            when { expression { params.action == 'create'} }
+            steps{
+                script{
+                    dockerRun("${params.ImageName}")
+                }
+            }
+        }
         stage('Docker Image Cleanup : DockerHub '){
          when { expression {  params.action == 'create' } }
             steps{
