@@ -107,8 +107,16 @@ pipeline{
                 }
             }
         }
+        stage('Docker image push to Ecr'){
+            when{expression{params.action=='create'}}
+            steps{
+                script{
+                   dockerPushToEcr("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
+                }
+            }
+        }
         stage('Docker Image Cleanup : DockerHub '){
-         when { expression {  params.action == 'create' } }
+         when { expression {  params.action == 'Destroy' } }
             steps{
                script{
                    
